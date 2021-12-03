@@ -9,7 +9,7 @@ using namespace std;
 class Graph {
     private:
 
-    //Graph as an adjacency list - data member, e.g. Vector, Set, Vector of Vectors, Maps, Lists, etc.
+    // Graph as an adjacency list - data member, e.g. Vector, Set, Vector of Vectors, Maps, Lists, etc.
     // Key is IMDb identifier, value is a pair where:
     //      first = IMDb identifier of an adjacent actor
     //      second = a vector of movies (using IMDb identifier of movie) that the adjacent actors are in
@@ -20,6 +20,10 @@ class Graph {
     //      value = name/title of actor/movie
     unordered_map<string, string> actors;
     unordered_map<string, string> movies;
+
+    // Number of vertices and edges
+    int vertices;
+    int edges;
 
     public:
     Graph();
