@@ -4,11 +4,7 @@
 #include <vector>
 #include <string>
 #include <map>
-using std::string;
-using std::pair;
-using std::vector;
-using std::map;
-using std::cout;
+using namespace std;
 
 class Graph {
     private:
