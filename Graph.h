@@ -18,9 +18,10 @@ class Graph {
     map<string, vector<pair<string, int>>> graph;
 
     public:
-    void insertEdge(int from, int to, int weight);
-    vector<int> getAdjacent(int vertex);
-    int getDegree(int vertex);
+    Graph();
+    void insertEdge(string from, string to);
+    vector<int> getAdjacent(string vertex);
+    int getDegree(string vertex);
 
 };
 
