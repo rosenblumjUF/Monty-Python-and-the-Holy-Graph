@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -10,9 +12,6 @@ using std::cout;
 
 
 
-#pragma once
-
-
 class Graph {
     private:
     //Graph as an adjacency list - data member, e.g. Vector, Set, Vector of Vectors, Maps, Lists, etc.
@@ -21,8 +20,8 @@ class Graph {
     public:
     void insertEdge(int from, int to, int weight);
     vector<int> getAdjacent(int vertex);
-    int getIndegree(int vertex);
-    int getOutdegree(int vertex);
+    int getDegree(int vertex);
+
 };
 
 
