@@ -3,13 +3,13 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <map>
+#include <unordered_map>
 using namespace std;
 
 class Graph {
     private:
     //Graph as an adjacency list - data member, e.g. Vector, Set, Vector of Vectors, Maps, Lists, etc.
-    map<string, vector<string>> graph;
+    unordered_map<string, vector<string>> graph;
 
     public:
     Graph();
