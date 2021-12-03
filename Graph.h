@@ -15,12 +15,12 @@ using std::cout;
 class Graph {
     private:
     //Graph as an adjacency list - data member, e.g. Vector, Set, Vector of Vectors, Maps, Lists, etc.
-    map<string, vector<pair<string, int>>> graph;
+    map<string, vector<string>> graph;
 
     public:
     Graph();
     void insertEdge(string from, string to);
-    vector<int> getAdjacent(string vertex);
+    vector<string> getAdjacent(string vertex);
     int getDegree(string vertex);
 
 };
