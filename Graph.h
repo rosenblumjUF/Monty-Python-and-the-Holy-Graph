@@ -12,7 +12,7 @@ class Graph {
     // Graph as an adjacency list - data member, e.g. Vector, Set, Vector of Vectors, Maps, Lists, etc.
     // Key is IMDb identifier, value is a vector of pairs where:
     //      first = IMDb identifier of an adjacent actor
-    //      second = a vector of movies (using IMDb identifier of movie) that the adjacent actors are in
+    //      second = a vector of movies (using IMDb identifier of movie) that the adjacent actor and key actor are in together
     unordered_map<string, vector<pair<string, vector<string>>>> graph;
 
     // Unordered maps used to translate IMDb identifier to name of actor or movie

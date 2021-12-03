@@ -12,7 +12,7 @@ void Graph::insertEdge(string from, string to)
 
 vector<string> Graph::getAdjacent(string vertex)
 {
-    return graph[vertex];
+//    return graph[vertex];
 }
 
 int Graph::getDegree(string vertex)
