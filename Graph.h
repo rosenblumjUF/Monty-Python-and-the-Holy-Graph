@@ -31,6 +31,7 @@ class Graph {
     vector<string> getAdjacent(string vertex);
     int getDegree(string vertex);
 
+
 };
 
 

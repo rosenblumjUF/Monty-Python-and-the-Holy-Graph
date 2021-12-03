@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++ -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/Monty_Python_and_the_Holy_Graph.dir/main.cpp.o CMakeFiles/Monty_Python_and_the_Holy_Graph.dir/Graph.cpp.o -o Monty_Python_and_the_Holy_Graph 
