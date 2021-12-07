@@ -7,7 +7,7 @@ Graph::Graph()
 
 void Graph::insertEdges()
 {
-    ifstream inFile("test2");
+    ifstream inFile("titles.csv");
     string lineFromFile;
     getline(inFile, lineFromFile); //to account for header in file
     string currMovie = "tt0000009";
