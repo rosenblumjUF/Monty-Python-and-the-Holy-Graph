@@ -11,48 +11,50 @@ void Graph::insertEdges()
     string lineFromFile;
     getline(inFile, lineFromFile); //to account for header in file
     string currMovie = "tt0000009";
-    vector<string> actors;
+    vector<string> adjActors;
+    string newMovie;
+    string actor;
     while(getline(inFile, lineFromFile))
     {
         istringstream stream(lineFromFile);
-        string newMovie;
-        string actor;
         getline(stream, newMovie, ',');
         getline(stream, actor);
         if(newMovie == currMovie)
-            actors.push_back(actor);
+            adjActors.push_back(actor);
         else
         {
-            for(int i = 0; i < actors.size(); i++)
+            for(int i = 0; i < adjActors.size(); i++)
             {
-                string currVertex = actors[i];
-                for(int j = 0; j < actors.size(); j++)
+                string currVertex = adjActors[i];
+                for(int j = 0; j < adjActors.size(); j++)
                 {
                     if(i != j)
                     {
-                        graph[currVertex].push_back(actors[j]);
-                        adjMovies[currVertex].first = actors[j];
-                        adjMovies[currVertex].second.push_back(currMovie);
+                        graph[currVertex].push_back(adjActors[j]);
+                        adjMovies[make_pair(currVertex, adjActors[j])].push_back(currMovie);
                     }
                 }
             }
             currMovie = newMovie;
-            actors.clear();
-            actors.push_back(actor);
+            adjActors.clear();
+            adjActors.push_back(actor);
         }
 
     }
 
-
-    for(auto it = adjMovies.begin();  it != adjMovies.end(); it++)
+    for(int i = 0; i < adjActors.size(); i++)
     {
-        cout << it->first << ", ";
-        cout << it->second.first << endl;
-        for (int i = 0; i < it->second.second.size(); i++)
+        string currVertex = adjActors[i];
+        for(int j = 0; j < adjActors.size(); j++)
         {
-            cout << it->second.second[i] << endl;
+            if(i != j)
+            {
+                graph[currVertex].push_back(adjActors[j]);
+                adjMovies[make_pair(currVertex, adjActors[j])].push_back(currMovie);
+            }
         }
     }
+
 }
 
 vector<string> Graph::getAdjacent(string vertex)

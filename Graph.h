@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <map>
 
 using namespace std;
 
@@ -23,7 +24,7 @@ class Graph {
     //      value = name/title of actor/movie
     unordered_map<string, string> actors; // <actor name, id>
     unordered_map<string, string> movies; // <id, movie names>
-    unordered_map<string, pair<string, vector<string>>> adjMovies; //movies connecting each pair
+    map<pair<string, string>, vector<string>> adjMovies; //movies connecting each pair
 
     // Number of vertices and edges
     int vertices;
