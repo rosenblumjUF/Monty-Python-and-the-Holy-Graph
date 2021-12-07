@@ -18,8 +18,8 @@ class Graph {
     // Unordered maps used to translate IMDb identifier to name of actor or movie
     //      key = IMDb identifier of actor/movie
     //      value = name/title of actor/movie
-    unordered_map<string, string> actors;
-    unordered_map<string, string> movies;
+    unordered_map<string, string> actors; // <actor name, id>
+    unordered_map<string, string> movies; // <id, movie names>
 
     // Number of vertices and edges
     int vertices;
@@ -30,7 +30,9 @@ class Graph {
     void insertEdge(string from, string to);
     vector<string> getAdjacent(string vertex);
     int getDegree(string vertex);
-
+    int BFS(string sourceID, string destID, Graph g);
+    int Bidirectional(string sourceID, string destID, Graph g);
+    void printMovies(vector<string>);
 
 };
 
