@@ -5,7 +5,7 @@ Graph::Graph()
 
 }
 
-void Graph::insertEdge(string from, string to)
+void Graph::insertEdges()
 {
 
 }
@@ -23,4 +23,16 @@ vector<string> Graph::getAdjacent(string vertex)
 int Graph::getDegree(string vertex)
 {
     return graph[vertex].size();
+}
+
+int Graph::BFS(string sourceID, string destID, Graph g) {
+    return 0;
+}
+
+int Graph::Bidirectional(string sourceID, string destID, Graph g) {
+    return 0;
+}
+
+void Graph::printMovies(vector<string>) {
+
 }
