@@ -1,9 +1,9 @@
 #pragma once
-
 #include <iostream>
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <fstream>
 using namespace std;
 
 class Graph {
@@ -27,12 +27,13 @@ class Graph {
 
     public:
     Graph();
-    void insertEdge(string from, string to);
+    void insertEdges();
     vector<string> getAdjacent(string vertex);
     int getDegree(string vertex);
     int BFS(string sourceID, string destID, Graph g);
     int Bidirectional(string sourceID, string destID, Graph g);
     void printMovies(vector<string>);
+    void readData();
 
 };
 
