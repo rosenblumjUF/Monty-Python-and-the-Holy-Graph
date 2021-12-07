@@ -1,10 +1,9 @@
-//
-// Created by Maddie Brewer on 12/3/21.
-//
+#include "Graph.h"
 
 int main()
 {
-
+    Graph hi;
+    hi.insertEdges();
     return 0;
 };
 
