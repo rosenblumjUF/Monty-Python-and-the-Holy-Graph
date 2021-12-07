@@ -7,6 +7,8 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include <queue>
+#include <set>
 
 using namespace std;
 
@@ -35,8 +37,8 @@ class Graph {
     void insertEdges();
     vector<string> getAdjacent(string vertex);
     int getDegree(string vertex);
-    int BFS(string sourceID, string destID, Graph g);
-    int Bidirectional(string sourceID, string destID, Graph g);
+    int BFS(string sourceID, string destID);
+    int Bidirectional(string sourceID, string destID);
     void printMovies(vector<string>);
     void readData();
 

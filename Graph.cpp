@@ -54,7 +54,6 @@ void Graph::insertEdges()
             }
         }
     }
-
 }
 
 vector<string> Graph::getAdjacent(string vertex)
@@ -67,14 +66,64 @@ int Graph::getDegree(string vertex)
     return graph[vertex].size();
 }
 
-int Graph::BFS(string sourceID, string destID, Graph g) {
-    return 0;
+int Graph::BFS(string sourceID, string destID)
+{
+    queue<string> q; //vertices to be visited
+    set<string> visited; //stores visited vertices
+    map<string, int> dist; //stores distance to each visited vertex
+    map<string, string> pred; //stores predecessor for each vertex visited
+    int degreesOfSep = -1;
+    vector<string> moviesOnPath; //stores all movies/edges on path from source to dest
+    //initialize:
+    q.push(sourceID);
+    visited.insert(sourceID);
+    dist[sourceID] = 0;
+    pred[sourceID] = "";
+
+    //BFS:
+    while(!q.empty())
+    {
+        string u = q.front();
+        q.pop();
+        vector<string> neighbors = graph[u];
+        for(string n : neighbors)
+        {
+            if(visited.count(n) == 0)
+            {
+                visited.insert(n);
+                dist[n] = dist[u] + 1;
+                pred[n] = u;
+                q.push(n);
+
+                if(n == destID)//stop BFS, destination has been reached
+                {
+                    degreesOfSep = dist[n];
+                    /*while(pred[n] != "")
+                    {
+                        for(string m : adjMovies[make_pair(pred[n], n)])
+                        {
+                            moviesOnPath.push_back(m);
+                        }
+                        n = pred[n];
+                    }
+                    printMovies(moviesOnPath);*/
+                    return degreesOfSep;
+                }
+            }
+        }
+    }
+    return degreesOfSep;
 }
 
-int Graph::Bidirectional(string sourceID, string destID, Graph g) {
+int Graph::Bidirectional(string sourceID, string destID) {
     return 0;
 }
 
 void Graph::printMovies(vector<string>) {
+
+}
+
+void Graph::readData()
+{
 
 }
