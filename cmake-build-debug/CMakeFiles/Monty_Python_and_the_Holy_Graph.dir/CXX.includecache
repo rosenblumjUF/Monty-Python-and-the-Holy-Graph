@@ -6,7 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/Users/maddiebrewer/CLionProjects/Monty-Python-and-the-Holy-Graph/main.cpp
+/Users/maddiebrewer/CLionProjects/Monty-Python-and-the-Holy-Graph/Graph.cpp
+Graph.h
+/Users/maddiebrewer/CLionProjects/Monty-Python-and-the-Holy-Graph/Graph.h
+
+/Users/maddiebrewer/CLionProjects/Monty-Python-and-the-Holy-Graph/Graph.h
 iostream
+-
+vector
+-
+string
+-
+unordered_map
 -
 
