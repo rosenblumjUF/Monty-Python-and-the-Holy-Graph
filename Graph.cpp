@@ -165,6 +165,7 @@ void Graph::readData()
         getline(stream, actorID, ',');
         getline(stream, actorName);
         actors[actorName] = actorID;
+        vertices++;
     }
 
 }
