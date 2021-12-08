@@ -143,6 +143,7 @@ void Graph::printMovies(vector<string> moviePath) {
 
 void Graph::readData()
 {
+    //Reads data from movies.csv and store it in the movies map
     ifstream inFile("movies.csv");
     string lineFromFile;
     getline(inFile, lineFromFile); //to account for header in file
@@ -159,6 +160,7 @@ void Graph::readData()
 
     inFile.close();
 
+    //Reads data from names.csv and store it in the actors map
     inFile.open("names.csv");
     getline(inFile, lineFromFile); //to account for header in file
     string actorID;
