@@ -29,8 +29,8 @@ class Graph {
     map<pair<string, string>, vector<string>> adjMovies; //movies connecting each pair
 
     // Number of vertices and edges
-    int vertices;
-    int edges;
+    int vertices = 0;
+    int edges = 0;
 
     public:
     Graph();
