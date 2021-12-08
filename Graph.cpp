@@ -98,7 +98,7 @@ int Graph::BFS(string sourceID, string destID)
                 if(n == destID)//stop BFS, destination has been reached
                 {
                     degreesOfSep = dist[n];
-                    /*while(pred[n] != "")
+                    /*while(n != "")
                     {
                         for(string m : adjMovies[make_pair(pred[n], n)])
                         {
