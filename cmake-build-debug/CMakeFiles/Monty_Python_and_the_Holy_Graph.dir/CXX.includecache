@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/Users/maddiebrewer/CLionProjects/Monty-Python-and-the-Holy-Graph/Graph.cpp
+C:/Users/mwiel/CLionProjects/Monty-Python-and-the-Holy-Graph/Graph.cpp
 Graph.h
-/Users/maddiebrewer/CLionProjects/Monty-Python-and-the-Holy-Graph/Graph.h
+C:/Users/mwiel/CLionProjects/Monty-Python-and-the-Holy-Graph/Graph.h
 
-/Users/maddiebrewer/CLionProjects/Monty-Python-and-the-Holy-Graph/Graph.h
+C:/Users/mwiel/CLionProjects/Monty-Python-and-the-Holy-Graph/Graph.h
 iostream
 -
 vector
@@ -18,5 +18,17 @@ vector
 string
 -
 unordered_map
+-
+fstream
+-
+sstream
+-
+string
+-
+map
+-
+queue
+-
+set
 -
 

@@ -133,8 +133,12 @@ int Graph::Bidirectional(string sourceID, string destID) {
     return 0;
 }
 
-void Graph::printMovies(vector<string>) {
+void Graph::printMovies(vector<string> moviePath) {
+    cout << "MOVIE SUGGESTIONS:" << endl;
 
+    for (int i = 0; i < moviePath.size(); i++) {
+        cout << moviePath[i] << endl;
+    }
 }
 
 void Graph::readData()
@@ -152,9 +156,10 @@ void Graph::readData()
         getline(stream, movieTitle);
         movies[movieID] = movieTitle;
     }
+
     inFile.close();
 
-    inFile.open("movies.csv");
+    inFile.open("names.csv");
     getline(inFile, lineFromFile); //to account for header in file
     string actorID;
     string actorName;
