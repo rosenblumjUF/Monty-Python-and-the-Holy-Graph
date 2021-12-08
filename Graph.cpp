@@ -167,7 +167,7 @@ int Graph::Bidirectional(string sourceID, string destID) {
 
             for (int i = 0; i < path.size(); ++i)
             {
-                cout << findActor(path[i]) << "->";
+                cout << FindActor(path[i]) << "->";
             }
 
             return 1;
@@ -203,7 +203,7 @@ int Graph::Bidirectional(string sourceID, string destID) {
 
                 for (int i = 0; i < path.size(); ++i)
                 {
-                    cout << findActor(path[i]) << "->";
+                    cout << FindActor(path[i]) << "->";
                 }
 
                 return path.size() - 1;
@@ -235,7 +235,7 @@ void Graph::BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, u
     q.pop();
 }
 
-string Graph::findActor(string ID)
+string Graph::FindActor(string ID)
 {
     for (auto iter = actors.begin(); iter != actors.end(); ++iter)
     {

@@ -34,7 +34,7 @@ class Graph {
     int edges = 0;
 
     void BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, unordered_map<string,string>& previous);
-    string findActor(string ID);
+    string FindActor(string ID);
 
     public:
     Graph();
