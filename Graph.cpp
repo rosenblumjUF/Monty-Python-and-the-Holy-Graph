@@ -2,11 +2,6 @@
 
 Graph::Graph()
 {
-
-}
-
-void Graph::insertEdges()
-{
     ifstream inFile("titles.csv");
     string lineFromFile;
     getline(inFile, lineFromFile); //to account for header in file
@@ -32,6 +27,7 @@ void Graph::insertEdges()
                     {
                         graph[currVertex].push_back(adjActors[j]);
                         adjMovies[make_pair(currVertex, adjActors[j])].push_back(currMovie);
+                        edges++;
                     }
                 }
             }
@@ -42,6 +38,7 @@ void Graph::insertEdges()
 
     }
 
+
     for(int i = 0; i < adjActors.size(); i++)
     {
         string currVertex = adjActors[i];
@@ -51,19 +48,36 @@ void Graph::insertEdges()
             {
                 graph[currVertex].push_back(adjActors[j]);
                 adjMovies[make_pair(currVertex, adjActors[j])].push_back(currMovie);
+                edges++;
             }
         }
     }
 }
 
+void Graph::insertEdges()
+{
+
+
+}
+
 vector<string> Graph::getAdjacent(string vertex)
 {
-    return graph[vertex];
+    vector<string> adjVertices;
+    for (auto it = adjMovies.begin(); it != adjMovies.end(); it++)
+    {
+        if (it->first.first == vertex)
+            adjVertices.push_back(it->first.second);
+
+    }
+
+//    return graph[vertex];
+    return adjVertices;
 }
 
 int Graph::getDegree(string vertex)
 {
-    return graph[vertex].size();
+    vector<string> adjVertices = getAdjacent(vertex);
+    return adjVertices.size();
 }
 
 int Graph::BFS(string sourceID, string destID)
@@ -125,5 +139,32 @@ void Graph::printMovies(vector<string>) {
 
 void Graph::readData()
 {
+    ifstream inFile("movies.csv");
+    string lineFromFile;
+    getline(inFile, lineFromFile); //to account for header in file
+    string movieID;
+    string movieTitle;
+
+    while(getline(inFile, lineFromFile))
+    {
+        istringstream stream(lineFromFile);
+        getline(stream, movieID, ',');
+        getline(stream, movieTitle);
+        movies[movieID] = movieTitle;
+    }
+    inFile.close();
+
+    inFile.open("movies.csv");
+    getline(inFile, lineFromFile); //to account for header in file
+    string actorID;
+    string actorName;
+
+    while(getline(inFile, lineFromFile))
+    {
+        istringstream stream(lineFromFile);
+        getline(stream, actorID, ',');
+        getline(stream, actorName);
+        actors[actorName] = actorID;
+    }
 
 }
