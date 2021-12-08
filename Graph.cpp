@@ -133,7 +133,118 @@ int Graph::BFS(string sourceID, string destID)
 }
 
 int Graph::Bidirectional(string sourceID, string destID) {
-    return 0;
+
+    if (sourceID == destID)
+    {
+        ////**** WHAT DO I PRINT HERE???
+        return 0;
+    }
+
+    unordered_set<string> sourceVisited;
+    unordered_set<string> destVisited;
+
+    unordered_map<string,string> sourcePrev; // key = node, value = previous node
+    unordered_map<string,string> destPrev; // key = node, value = previous node
+
+    queue<string> sourceQueue;
+    sourceQueue.push(sourceID);
+
+    queue<string> destQueue;
+    destQueue.push(destID);
+
+    vector<string> path;
+
+    bool firstIteration = true;
+    while (!sourceQueue.empty() && !destQueue.empty())
+    {
+        BidirectionalBFS(sourceQueue,sourceVisited,sourcePrev);
+        BidirectionalBFS(destQueue,destVisited,destPrev);
+
+        if (firstIteration && destVisited.find(sourceID) != destVisited.end())
+        {
+            path.emplace_back(sourceID);
+            path.emplace_back(destID);
+
+            for (int i = 0; i < path.size(); ++i)
+            {
+                cout << findActor(path[i]) << "->";
+            }
+
+            return 1;
+        }
+
+
+        for (auto iter = sourceVisited.begin(); iter != sourceVisited.end(); ++iter)
+        {
+            if (destVisited.find(*iter) != destVisited.end())
+            {
+                string currID = *iter;
+                path.emplace_back(currID);
+                //    if (intersect == ID)
+                //    {
+                //        return path;
+                //    }
+
+                while (currID != sourceID)
+                {
+                    currID = sourcePrev[currID];
+                    path.emplace(path.begin(),currID);
+
+                }
+
+                currID = *iter;
+                while (currID != destID)
+                {
+                    currID = destPrev[currID];
+                    path.emplace_back(currID);
+                }
+
+
+
+                for (int i = 0; i < path.size(); ++i)
+                {
+                    cout << findActor(path[i]) << "->";
+                }
+
+                return path.size() - 1;
+            }
+        }
+
+        firstIteration = false;
+    }
+
+
+    return -1;
+}
+
+void Graph::BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, unordered_map<string,string>& previous)
+{
+    string currID = q.front();
+    vector<string> children = graph[currID];
+
+    for (int i = 0; i < children.size(); ++i)
+    {
+        if (visited.find(children[i]) == visited.end())
+        {
+            previous[children[i]] = currID;
+            visited.insert(children[i]);
+            q.push(children[i]);
+        }
+    }
+
+    q.pop();
+}
+
+string Graph::findActor(string ID)
+{
+    for (auto iter = actors.begin(); iter != actors.end(); ++iter)
+    {
+        if ((*iter).second == ID)
+        {
+            return (*iter).first;
+        }
+    }
+    return "";
 }
 
 void Graph::printMovies(vector<string> moviePath) {

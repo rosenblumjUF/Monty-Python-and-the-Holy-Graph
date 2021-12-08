@@ -9,6 +9,7 @@
 #include <map>
 #include <queue>
 #include <set>
+#include <unordered_set>
 
 using namespace std;
 
@@ -31,6 +32,9 @@ class Graph {
     // Number of vertices and edges
     int vertices = 0;
     int edges = 0;
+
+    void BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, unordered_map<string,string>& previous);
+    string findActor(string ID);
 
     public:
     Graph();
