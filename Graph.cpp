@@ -52,6 +52,9 @@ Graph::Graph()
             }
         }
     }
+
+    readData();
+
 }
 
 void Graph::insertEdges()
