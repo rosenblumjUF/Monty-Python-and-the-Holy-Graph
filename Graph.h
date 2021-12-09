@@ -34,7 +34,7 @@ class Graph {
     int edges = 0;
 
     void BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, unordered_map<string,string>& previous);
-    string FindActor(string ID);
+    string FindActor(const string& ID);
 
     public:
     Graph();
@@ -42,9 +42,10 @@ class Graph {
     vector<string> getAdjacent(string vertex);
     int getDegree(string vertex);
     int BFS(string sourceID, string destID);
-    int Bidirectional(string sourceID, string destID);
+    int Bidirectional(const string& sourceID, const string& destID);
     void printMovies(vector<string>);
     void readData();
+    bool doesActorExist(const string& actor);
 
 };
 

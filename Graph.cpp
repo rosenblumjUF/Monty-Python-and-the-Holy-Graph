@@ -132,19 +132,15 @@ int Graph::BFS(string sourceID, string destID)
     return degreesOfSep;
 }
 
-int Graph::Bidirectional(string sourceID, string destID) {
+int Graph::Bidirectional(const string& sourceID, const string& destID) {
 
-    if (sourceID == destID)
-    {
-        ////**** WHAT DO I PRINT HERE???
-        return 0;
-    }
+    // Source for Bidirectional stuff: https://www.geeksforgeeks.org/bidirectional-search/
 
     unordered_set<string> sourceVisited;
     unordered_set<string> destVisited;
 
-    unordered_map<string,string> sourcePrev; // key = node, value = previous node
-    unordered_map<string,string> destPrev; // key = node, value = previous node
+    unordered_map<string,string> sourcePrev; // key = actor, value = previous actor
+    unordered_map<string,string> destPrev; // key = actor, value = previous actor
 
     queue<string> sourceQueue;
     sourceQueue.push(sourceID);
@@ -180,16 +176,11 @@ int Graph::Bidirectional(string sourceID, string destID) {
             {
                 string currID = *iter;
                 path.emplace_back(currID);
-                //    if (intersect == ID)
-                //    {
-                //        return path;
-                //    }
 
                 while (currID != sourceID)
                 {
                     currID = sourcePrev[currID];
                     path.emplace(path.begin(),currID);
-
                 }
 
                 currID = *iter;
@@ -198,8 +189,6 @@ int Graph::Bidirectional(string sourceID, string destID) {
                     currID = destPrev[currID];
                     path.emplace_back(currID);
                 }
-
-
 
                 for (int i = 0; i < path.size(); ++i)
                 {
@@ -235,7 +224,7 @@ void Graph::BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, u
     q.pop();
 }
 
-string Graph::FindActor(string ID)
+string Graph::FindActor(const string& ID)
 {
     for (auto iter = actors.begin(); iter != actors.end(); ++iter)
     {
@@ -289,4 +278,13 @@ void Graph::readData()
         vertices++;
     }
 
+}
+
+bool Graph::doesActorExist(const string& actor)
+{
+    if (actors.find(actor) != actors.end())
+    {
+        return true;
+    }
+    return false;
 }
