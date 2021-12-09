@@ -57,40 +57,14 @@ Graph::Graph()
 
 }
 
-void Graph::insertEdges()
-{
-
-
-}
-
-vector<string> Graph::getAdjacent(string vertex)
-{
-    vector<string> adjVertices;
-    for (auto it = adjMovies.begin(); it != adjMovies.end(); it++)
-    {
-        if (it->first.first == vertex)
-            adjVertices.push_back(it->first.second);
-
-    }
-
-//    return graph[vertex];
-    return adjVertices;
-}
-
-int Graph::getDegree(string vertex)
-{
-    vector<string> adjVertices = getAdjacent(vertex);
-    return adjVertices.size();
-}
-
-int Graph::BFS(string sourceID, string destID)
+void Graph::BFS(const string& sourceID, const string& destID)
 {
     queue<string> q; //vertices to be visited
     set<string> visited; //stores visited vertices
     map<string, int> dist; //stores distance to each visited vertex
     map<string, string> pred; //stores predecessor for each vertex visited
     int degreesOfSep = -1;
-    vector<string> moviesOnPath; //stores all movies/edges on path from source to dest
+    vector<string> actorsOnPath; //stores all actors on path from source to dest
     //initialize:
     q.push(sourceID);
     visited.insert(sourceID);
@@ -115,21 +89,18 @@ int Graph::BFS(string sourceID, string destID)
                 if(n == destID)//stop BFS, destination has been reached
                 {
                     degreesOfSep = dist[n];
-                    /*while(n != "")
+                    while(n != "")
                     {
-                        for(string m : adjMovies[make_pair(pred[n], n)])
-                        {
-                            moviesOnPath.push_back(m);
-                        }
+                        actorsOnPath.insert(actorsOnPath.begin(), n);
                         n = pred[n];
                     }
-                    printMovies(moviesOnPath);*/
-                    return degreesOfSep;
+                    cout << "~Using BFS Shortest Path~" << endl;
+                    printResults(actorsOnPath, degreesOfSep);
+                    return;
                 }
             }
         }
     }
-    return degreesOfSep;
 }
 
 int Graph::Bidirectional(const string& sourceID, const string& destID) {
@@ -236,11 +207,25 @@ string Graph::FindActor(const string& ID)
     return "";
 }
 
-void Graph::printMovies(vector<string> moviePath) {
-    cout << "MOVIE SUGGESTIONS:" << endl;
-
-    for (int i = 0; i < moviePath.size(); i++) {
-        cout << moviePath[i] << endl;
+void Graph::printResults(const vector<string>& path, int sep)
+{
+    if(sep != -1)
+    {
+        cout << "Degrees of Separation: " << sep << endl;
+        for(int i = 0; i < path.size() - 1; i++)
+        {
+            cout << "Path from actor 1 to actor 2: " << endl;
+            cout << FindActor(path[i]) << " -> " << FindActor(path[i + 1]) << endl;
+            cout << "Collaborations: " << endl;
+            for(string mov : adjMovies[make_pair(path[i], path[i + 1])])
+            {
+                cout << "~" << movies[mov] << endl;
+            }
+        }
+    }
+    else
+    {
+        cout << "These two actors are not connected, please input two new actors." << endl;
     }
 }
 
@@ -278,6 +263,14 @@ void Graph::readData()
         vertices++;
     }
 
+}
+
+void Graph::getResults(string actor1, string actor2)
+{
+    string src = actors[actor1];
+    string dest = actors[actor2];
+    BFS(src, dest);
+    Bidirectional(src, dest);
 }
 
 bool Graph::doesActorExist(const string& actor)
