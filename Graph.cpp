@@ -54,7 +54,6 @@ Graph::Graph()
     }
 
     readData();
-
 }
 
 void Graph::BFS(const string& sourceID, const string& destID)
@@ -125,24 +124,61 @@ void Graph::bidirectional(const string& sourceID, const string& destID) {
     unordered_map<string,string> sourcePrev; // key = actor, value = previous actor
     unordered_map<string,string> destPrev; // key = actor, value = previous actor
 
-    queue<string> sourceQueue;
-    sourceQueue.push(sourceID);
+    queue<pair<string,int>> sourceQueue;
+    sourceQueue.push(make_pair(sourceID,0));
 
-    queue<string> destQueue;
-    destQueue.push(destID);
+    queue<pair<string,int>> destQueue;
+    destQueue.push(make_pair(destID,0));
 
-    vector<string> path;
+    sourceVisited.insert(sourceID);
+    destVisited.insert(destID);
 
-    bool firstIteration = true;
     while (!sourceQueue.empty() && !destQueue.empty())
     {
-        BidirectionalBFS(sourceQueue,sourceVisited,sourcePrev);
-        BidirectionalBFS(destQueue,destVisited,destPrev);
-
-        if (firstIteration && destVisited.find(sourceID) != destVisited.end())
+        bidirectionalBFS(sourceQueue, sourceVisited, sourcePrev);
+        if (checkOverlap(sourceVisited, destVisited, sourcePrev, destPrev, sourceID, destID, startTime))
         {
-            path.emplace_back(sourceID);
-            path.emplace_back(destID);
+            return;
+        }
+        bidirectionalBFS(destQueue, destVisited, destPrev);
+
+        if (checkOverlap(sourceVisited, destVisited, sourcePrev, destPrev, sourceID, destID, startTime))
+        {
+            return;
+        }
+
+    }
+
+    vector<string> path;
+    printResults(path,-1);
+    return;
+}
+
+bool Graph::checkOverlap(const unordered_set<string>& sourceVisited, const unordered_set<string>& destVisited,
+        const unordered_map<string,string>& sourcePrev, const unordered_map<string,string>& destPrev,
+        const string& sourceID, const string& destID, chrono::time_point<chrono::high_resolution_clock> startTime)
+{
+    vector<string> path;
+
+    for (auto iter = sourceVisited.begin(); iter != sourceVisited.end(); ++iter)
+    {
+        if (destVisited.find(*iter) != destVisited.end())
+        {
+            string currID = *iter;
+            path.emplace_back(currID);
+
+            while (currID != sourceID)
+            {
+                currID = sourcePrev.at(currID);
+                path.emplace(path.begin(),currID);
+            }
+
+            currID = *iter;
+            while (currID != destID)
+            {
+                currID = destPrev.at(currID);
+                path.emplace_back(currID);
+            }
 
             auto endTime = chrono::high_resolution_clock::now();
 
@@ -152,68 +188,36 @@ void Graph::bidirectional(const string& sourceID, const string& destID) {
             cout << "Time taken to complete search: " << time << " microseconds" << endl;
             printResults(path,path.size() - 1);
 
-            return;
+            return true;
         }
+    }
+    return false;
+}
 
+void Graph::bidirectionalBFS(queue<pair<string,int>>& q, unordered_set<string>& visited, unordered_map<string,string>& previous)
+{
+    int level = q.front().second;
+    while (q.front().second == level)
+    {
+        string currID = q.front().first;
+        vector<string> children = graph[currID];
 
-        for (auto iter = sourceVisited.begin(); iter != sourceVisited.end(); ++iter)
+        for (int i = 0; i < children.size(); ++i)
         {
-            if (destVisited.find(*iter) != destVisited.end())
+            if (visited.find(children[i]) == visited.end())
             {
-                string currID = *iter;
-                path.emplace_back(currID);
-
-                while (currID != sourceID)
-                {
-                    currID = sourcePrev[currID];
-                    path.emplace(path.begin(),currID);
-                }
-
-                currID = *iter;
-                while (currID != destID)
-                {
-                    currID = destPrev[currID];
-                    path.emplace_back(currID);
-                }
-
-                auto endTime = chrono::high_resolution_clock::now();
-
-                double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
-
-                cout << "~Using Bidirectional Shortest Path~" << endl;
-                cout << "Time taken to complete search: " << time << " microseconds" << endl;
-                printResults(path,path.size() - 1);
-
-                return;
+                previous[children[i]] = currID;
+                visited.insert(children[i]);
+                q.push(make_pair(children[i],level + 1));
             }
         }
 
-        firstIteration = false;
+        q.pop();
     }
 
-    printResults(path,-1);
-    return;
 }
 
-void Graph::BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, unordered_map<string,string>& previous)
-{
-    string currID = q.front();
-    vector<string> children = graph[currID];
-
-    for (int i = 0; i < children.size(); ++i)
-    {
-        if (visited.find(children[i]) == visited.end())
-        {
-            previous[children[i]] = currID;
-            visited.insert(children[i]);
-            q.push(children[i]);
-        }
-    }
-
-    q.pop();
-}
-
-string Graph::FindActor(const string& ID)
+string Graph::findActor(const string& ID)
 {
     for (auto iter = actors.begin(); iter != actors.end(); ++iter)
     {
@@ -225,6 +229,19 @@ string Graph::FindActor(const string& ID)
     return "";
 }
 
+string Graph::findMovie(const string &ID)
+{
+    for (auto iter = movies.begin(); iter != movies.end(); ++iter)
+    {
+        if ((*iter).second == ID)
+        {
+            return (*iter).first;
+        }
+    }
+    return "";
+
+}
+
 void Graph::printResults(const vector<string>& path, int sep)
 {
     if(sep != -1)
@@ -233,11 +250,11 @@ void Graph::printResults(const vector<string>& path, int sep)
         cout << "Path from actor 1 to actor 2: " << endl;
         for(int i = 0; i < path.size() - 1; i++)
         {
-            cout << "\t" << FindActor(path[i]) << " -> " << FindActor(path[i + 1]) << endl;
+            cout << "\t" << findActor(path[i]) << " -> " << findActor(path[i + 1]) << endl;
             cout << "\t\tCollaborations: " << endl;
             for(string mov : adjMovies[make_pair(path[i], path[i + 1])])
             {
-                cout << "\t\t~ \"" << movies[mov] << "\"" << endl;
+                cout << "\t\t~ \"" << findMovie(mov) << "\"" << endl;
             }
         }
     }
@@ -261,8 +278,8 @@ void Graph::readData()
         istringstream stream(lineFromFile);
         getline(stream, movieID, ',');
         getline(stream, movieTitle);
-        movies[movieID] = movieTitle;
-//        movies.insert(make_pair(movieTitle,movieID));
+//        movies[movieID] = movieTitle;
+        movies.insert(make_pair(movieTitle,movieID));
     }
 
     inFile.close();
@@ -278,13 +295,7 @@ void Graph::readData()
         istringstream stream(lineFromFile);
         getline(stream, actorID, ',');
         getline(stream, actorName);
-//        if (actors.find(actorName) != actors.end())
-//        {
-////            string tempID = actors[actorName];
-//            cout << actors[actorName] << " " << actorName << endl;
-//            cout << actorID << " " << actorName << endl;
-//        }
-//        actors[actorName] = actorID;
+
         actors.insert(make_pair(actorName,actorID));
         vertices++;
     }
@@ -293,16 +304,11 @@ void Graph::readData()
 
 void Graph::getResults(string src, string dest)
 {
-//    string src = actors[actor1];
-//    string dest = actors[actor2];
-//    string src = checkDuplicate(actor1);
-//    string dest = checkDuplicate(actor2);
-
-    cout << "------------------------------------------------" << endl;
+    cout << "--------------------------------------------------" << endl;
     BFS(src, dest);
-    cout << "------------------------------------------------" << endl;
+    cout << "--------------------------------------------------" << endl;
     bidirectional(src, dest);
-    cout << "------------------------------------------------" << endl;
+    cout << "--------------------------------------------------" << endl;
 }
 
 bool Graph::doesActorExist(const string& actor)
@@ -357,7 +363,7 @@ string Graph::checkDuplicate(const string& name)
                 if (selection < 1 || selection >= i)
                 {
                     selection = 0;
-                    throw invalid_argument("test");
+                    throw invalid_argument("");
                 }
             }
             catch(invalid_argument& e)
@@ -365,9 +371,6 @@ string Graph::checkDuplicate(const string& name)
                 cout << "Please type a valid number." << endl;
             }
         }
-
-
-
 
         for (int i = 0; i < selection - 1; ++i)
         {

@@ -27,17 +27,21 @@ class Graph {
     //      key = IMDb identifier of actor/movie
     //      value = name/title of actor/movie
     unordered_multimap<string, string> actors; // <actor name, id>
-    unordered_map<string, string> movies; // <id, movie names>
+    unordered_multimap<string, string> movies; // <id, movie names>
     map<pair<string, string>, vector<string>> adjMovies; //movies connecting each pair
 
     // Number of vertices and edges
     int vertices = 0;
     int edges = 0;
 
-    void BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, unordered_map<string,string>& previous);
-    string FindActor(const string& ID);
+    void bidirectionalBFS(queue<pair<string,int>>& q, unordered_set<string>& visited, unordered_map<string,string>& previous);
+    string findActor(const string& ID);
+    string findMovie(const string& ID);
     void BFS(const string& sourceID, const string& destID);
     void bidirectional(const string& sourceID, const string& destID);
+    bool checkOverlap(const unordered_set<string>& sourceVisited, const unordered_set<string>& destVisited,
+                      const unordered_map<string,string>& sourcePrev, const unordered_map<string,string>& destPrev,
+                      const string& sourceID, const string& destID, chrono::time_point<chrono::high_resolution_clock> startTime);
     void printResults(const vector<string>& path, int sep);
     void readData();
     bool isUniqueName(const string& name);
