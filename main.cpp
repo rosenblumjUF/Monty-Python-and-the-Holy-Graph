@@ -10,16 +10,16 @@ int main()
     while(true)
     {
         cout << "please input a name for actor 1, or type \"exit\" to end the program" << endl;
-        cin >> actor1;
-        if(!g.doesActorExist(actor1));
+        getline(cin,actor1);
+        if(!g.doesActorExist(actor1))
         {
-            cout << "The actor " << actor1 << ", does not exist in the IMDb database";
+            cout << "The actor " << actor1 << ", does not exist in the IMDb database" << endl;
         }
         cout << "please input name for actor 2, or type \"exit\" to end the program" << endl;
-        cin >> actor2;
+        getline(cin,actor2);
         if(!g.doesActorExist(actor2))
         {
-            cout << "The actor " << actor2 << ", does not exist in the IMDb database";
+            cout << "The actor " << actor2 << ", does not exist in the IMDb database" << endl;
         }
         if(actor1 == "exit" || actor2 == "exit")
             break;

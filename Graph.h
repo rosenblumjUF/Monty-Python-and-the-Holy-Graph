@@ -10,6 +10,7 @@
 #include <queue>
 #include <set>
 #include <unordered_set>
+#include <chrono>
 
 using namespace std;
 
@@ -36,7 +37,7 @@ class Graph {
     void BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, unordered_map<string,string>& previous);
     string FindActor(const string& ID);
     void BFS(const string& sourceID, const string& destID);
-    int Bidirectional(const string& sourceID, const string& destID);
+    void bidirectional(const string& sourceID, const string& destID);
     void printResults(const vector<string>& path, int sep);
     void readData();
 

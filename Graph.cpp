@@ -61,6 +61,8 @@ void Graph::BFS(const string& sourceID, const string& destID)
 {
     //Source: based on algorithms given in class and from https://www.geeksforgeeks.org/shortest-path-unweighted-graph/
     //start time here
+    auto startTime = chrono::high_resolution_clock::now();
+
     queue<string> q; //vertices to be visited
     set<string> visited; //stores visited vertices
     map<string, int> dist; //stores distance to each visited vertex
@@ -97,8 +99,12 @@ void Graph::BFS(const string& sourceID, const string& destID)
                         n = pred[n];
                     }
                     //time stop here
+                    auto endTime = chrono::high_resolution_clock::now();
+
+                    double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
+
                     cout << "~Using BFS Shortest Path~" << endl;
-                    cout << "Time taken to complete search: " << /*time here*/ << endl;
+                    cout << "Time taken to complete search: " << time << " ms" << endl;
                     printResults(actorsOnPath, degreesOfSep);
                     return;
                 }
@@ -107,9 +113,11 @@ void Graph::BFS(const string& sourceID, const string& destID)
     }
 }
 
-int Graph::Bidirectional(const string& sourceID, const string& destID) {
+void Graph::bidirectional(const string& sourceID, const string& destID) {
 
     // Source for Bidirectional stuff: https://www.geeksforgeeks.org/bidirectional-search/
+
+    auto startTime = chrono::high_resolution_clock::now();
 
     unordered_set<string> sourceVisited;
     unordered_set<string> destVisited;
@@ -136,12 +144,15 @@ int Graph::Bidirectional(const string& sourceID, const string& destID) {
             path.emplace_back(sourceID);
             path.emplace_back(destID);
 
-            for (int i = 0; i < path.size(); ++i)
-            {
-                cout << FindActor(path[i]) << "->";
-            }
+            auto endTime = chrono::high_resolution_clock::now();
 
-            return 1;
+            double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
+
+            cout << "~Using Bidirectional Shortest Path~" << endl;
+            cout << "Time taken to complete search: " << time << " ms" << endl;
+            printResults(path,path.size() - 1);
+
+            return;
         }
 
 
@@ -165,20 +176,23 @@ int Graph::Bidirectional(const string& sourceID, const string& destID) {
                     path.emplace_back(currID);
                 }
 
-                for (int i = 0; i < path.size(); ++i)
-                {
-                    cout << FindActor(path[i]) << "->";
-                }
+                auto endTime = chrono::high_resolution_clock::now();
 
-                return path.size() - 1;
+                double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
+
+                cout << "~Using Bidirectional Shortest Path~" << endl;
+                cout << "Time taken to complete search: " << time << " ms" << endl;
+                printResults(path,path.size() - 1);
+
+                return;
             }
         }
 
         firstIteration = false;
     }
 
-
-    return -1;
+    printResults(path,-1);
+    return;
 }
 
 void Graph::BidirectionalBFS(queue<string>& q, unordered_set<string>& visited, unordered_map<string,string>& previous)
@@ -220,10 +234,10 @@ void Graph::printResults(const vector<string>& path, int sep)
         {
             cout << "Path from actor 1 to actor 2: " << endl;
             cout << FindActor(path[i]) << " -> " << FindActor(path[i + 1]) << endl;
-            cout << "Collaborations: " << endl;
+            cout << "\tCollaborations: " << endl;
             for(string mov : adjMovies[make_pair(path[i], path[i + 1])])
             {
-                cout << "~" << movies[mov] << endl;
+                cout << "\t~ \"" << movies[mov] << "\"" << endl;
             }
         }
     }
@@ -273,8 +287,11 @@ void Graph::getResults(string actor1, string actor2)
 {
     string src = actors[actor1];
     string dest = actors[actor2];
+    cout << "-----------------------------------------" << endl;
     BFS(src, dest);
-    Bidirectional(src, dest);
+    cout << "-----------------------------------------" << endl;
+    bidirectional(src, dest);
+    cout << "-----------------------------------------" << endl;
 }
 
 bool Graph::doesActorExist(const string& actor)
