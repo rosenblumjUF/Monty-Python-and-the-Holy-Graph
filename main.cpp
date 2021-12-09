@@ -35,9 +35,7 @@ int main()
 
     }
 
-
-
-
+    cout << "See you next time!" << endl;
     return 0;
 };
 

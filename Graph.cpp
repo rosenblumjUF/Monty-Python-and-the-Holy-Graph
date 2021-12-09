@@ -59,6 +59,8 @@ Graph::Graph()
 
 void Graph::BFS(const string& sourceID, const string& destID)
 {
+    //Source: based on algorithms given in class and from https://www.geeksforgeeks.org/shortest-path-unweighted-graph/
+    //start time here
     queue<string> q; //vertices to be visited
     set<string> visited; //stores visited vertices
     map<string, int> dist; //stores distance to each visited vertex
@@ -89,12 +91,14 @@ void Graph::BFS(const string& sourceID, const string& destID)
                 if(n == destID)//stop BFS, destination has been reached
                 {
                     degreesOfSep = dist[n];
-                    while(n != "")
+                    while(n != "") //add actors of path to vector
                     {
                         actorsOnPath.insert(actorsOnPath.begin(), n);
                         n = pred[n];
                     }
+                    //time stop here
                     cout << "~Using BFS Shortest Path~" << endl;
+                    cout << "Time taken to complete search: " << /*time here*/ << endl;
                     printResults(actorsOnPath, degreesOfSep);
                     return;
                 }
