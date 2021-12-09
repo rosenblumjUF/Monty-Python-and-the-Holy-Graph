@@ -281,7 +281,7 @@ void Graph::printResults(const vector<string>& path, int sep)
     if(sep != -1)
     {
         cout << "Degrees of Separation: " << sep << endl;
-        cout << "Path from actor 1 to actor 2: " << endl;
+        cout << "Path from name 1 to name 2: " << endl;
         for(int i = 0; i < path.size() - 1; i++)
         {
             cout << "\t" << findActor(path[i]) << " -> " << findActor(path[i + 1]) << endl;
@@ -294,7 +294,7 @@ void Graph::printResults(const vector<string>& path, int sep)
     }
     else
     {
-        cout << "These two actors are not connected, please input two new actors." << endl;
+        cout << "These two actors/crewmembers are not connected, please input two new names." << endl;
     }
 }
 
@@ -377,7 +377,7 @@ string Graph::checkDuplicate(const string& name)
     else
     {
         // Prompts the user to select which duplicate they want
-        cout << "Multiple actors have the name " << name << ". Please type the number corresponding to your selection:" << endl;
+        cout << "Multiple actors/crewmembers have the name " << name << ". Please type the number corresponding to your selection:" << endl;
 
         auto iteratorPair = actors.equal_range(name);
         auto iter = iteratorPair.first;
