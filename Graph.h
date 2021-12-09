@@ -32,7 +32,6 @@ class Graph {
 
     // Number of vertices and edges
     int vertices = 0;
-    int edges = 0;
 
     void bidirectionalBFS(queue<pair<string,int>>& q, unordered_set<string>& visited, unordered_map<string,string>& previous);
     string findActor(const string& ID);

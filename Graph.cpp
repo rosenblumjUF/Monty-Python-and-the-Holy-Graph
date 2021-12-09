@@ -27,7 +27,6 @@ Graph::Graph()
                     {
                         graph[currVertex].push_back(adjActors[j]);
                         adjMovies[make_pair(currVertex, adjActors[j])].push_back(currMovie);
-                        edges++;
                     }
                 }
             }
@@ -48,7 +47,6 @@ Graph::Graph()
             {
                 graph[currVertex].push_back(adjActors[j]);
                 adjMovies[make_pair(currVertex, adjActors[j])].push_back(currMovie);
-                edges++;
             }
         }
     }
