@@ -26,7 +26,7 @@ class Graph {
     // Unordered maps used to translate IMDb identifier to name of actor or movie
     //      key = IMDb identifier of actor/movie
     //      value = name/title of actor/movie
-    unordered_map<string, string> actors; // <actor name, id>
+    unordered_multimap<string, string> actors; // <actor name, id>
     unordered_map<string, string> movies; // <id, movie names>
     map<pair<string, string>, vector<string>> adjMovies; //movies connecting each pair
 
@@ -40,12 +40,15 @@ class Graph {
     void bidirectional(const string& sourceID, const string& destID);
     void printResults(const vector<string>& path, int sep);
     void readData();
+    bool isUniqueName(const string& name);
+
 
 
     public:
     Graph();
-    void getResults(string actor1, string actor2);
+    void getResults(string src, string dest);
     bool doesActorExist(const string& actor);
+    string checkDuplicate(const string& name);
 };
 
 

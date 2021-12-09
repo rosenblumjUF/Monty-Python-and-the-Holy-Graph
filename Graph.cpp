@@ -61,7 +61,7 @@ void Graph::BFS(const string& sourceID, const string& destID)
 {
     //Source: based on algorithms given in class and from https://www.geeksforgeeks.org/shortest-path-unweighted-graph/
     //start time here
-    auto startTime = chrono::high_resolution_clock::now();
+    auto startTime = chrono::steady_clock::now();
 
     queue<string> q; //vertices to be visited
     set<string> visited; //stores visited vertices
@@ -99,7 +99,7 @@ void Graph::BFS(const string& sourceID, const string& destID)
                         n = pred[n];
                     }
                     //time stop here
-                    auto endTime = chrono::high_resolution_clock::now();
+                    auto endTime = chrono::steady_clock::now();
 
                     double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
 
@@ -117,7 +117,7 @@ void Graph::bidirectional(const string& sourceID, const string& destID) {
 
     // Source for Bidirectional stuff: https://www.geeksforgeeks.org/bidirectional-search/
 
-    auto startTime = chrono::high_resolution_clock::now();
+    auto startTime = chrono::steady_clock::now();
 
     unordered_set<string> sourceVisited;
     unordered_set<string> destVisited;
@@ -144,7 +144,7 @@ void Graph::bidirectional(const string& sourceID, const string& destID) {
             path.emplace_back(sourceID);
             path.emplace_back(destID);
 
-            auto endTime = chrono::high_resolution_clock::now();
+            auto endTime = chrono::steady_clock::now();
 
             double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
 
@@ -176,7 +176,7 @@ void Graph::bidirectional(const string& sourceID, const string& destID) {
                     path.emplace_back(currID);
                 }
 
-                auto endTime = chrono::high_resolution_clock::now();
+                auto endTime = chrono::steady_clock::now();
 
                 double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
 
@@ -233,11 +233,11 @@ void Graph::printResults(const vector<string>& path, int sep)
         cout << "Path from actor 1 to actor 2: " << endl;
         for(int i = 0; i < path.size() - 1; i++)
         {
-            cout << FindActor(path[i]) << " -> " << FindActor(path[i + 1]) << endl;
-            cout << "\tCollaborations: " << endl;
+            cout << "\t" << FindActor(path[i]) << " -> " << FindActor(path[i + 1]) << endl;
+            cout << "\t\tCollaborations: " << endl;
             for(string mov : adjMovies[make_pair(path[i], path[i + 1])])
             {
-                cout << "\t~ \"" << movies[mov] << "\"" << endl;
+                cout << "\t\t~ \"" << movies[mov] << "\"" << endl;
             }
         }
     }
@@ -262,6 +262,7 @@ void Graph::readData()
         getline(stream, movieID, ',');
         getline(stream, movieTitle);
         movies[movieID] = movieTitle;
+//        movies.insert(make_pair(movieTitle,movieID));
     }
 
     inFile.close();
@@ -277,21 +278,31 @@ void Graph::readData()
         istringstream stream(lineFromFile);
         getline(stream, actorID, ',');
         getline(stream, actorName);
-        actors[actorName] = actorID;
+//        if (actors.find(actorName) != actors.end())
+//        {
+////            string tempID = actors[actorName];
+//            cout << actors[actorName] << " " << actorName << endl;
+//            cout << actorID << " " << actorName << endl;
+//        }
+//        actors[actorName] = actorID;
+        actors.insert(make_pair(actorName,actorID));
         vertices++;
     }
 
 }
 
-void Graph::getResults(string actor1, string actor2)
+void Graph::getResults(string src, string dest)
 {
-    string src = actors[actor1];
-    string dest = actors[actor2];
-    cout << "-----------------------------------------" << endl;
+//    string src = actors[actor1];
+//    string dest = actors[actor2];
+//    string src = checkDuplicate(actor1);
+//    string dest = checkDuplicate(actor2);
+
+    cout << "------------------------------------------------" << endl;
     BFS(src, dest);
-    cout << "-----------------------------------------" << endl;
+    cout << "------------------------------------------------" << endl;
     bidirectional(src, dest);
-    cout << "-----------------------------------------" << endl;
+    cout << "------------------------------------------------" << endl;
 }
 
 bool Graph::doesActorExist(const string& actor)
@@ -302,3 +313,68 @@ bool Graph::doesActorExist(const string& actor)
     }
     return false;
 }
+
+bool Graph::isUniqueName(const string& name)
+{
+    auto iter = actors.equal_range(name);
+    if (++iter.first != iter.second)
+    {
+        return false;
+    }
+    return true;
+}
+
+string Graph::checkDuplicate(const string& name)
+{
+    if (isUniqueName(name))
+    {
+        return actors.find(name)->second;
+    }
+    else
+    {
+        cout << "Multiple actors have the name " << name << ". Please type the number corresponding to your selection:" << endl;
+
+        auto iteratorPair = actors.equal_range(name);
+        auto iter = iteratorPair.first;
+        auto endIter = iteratorPair.second;
+
+        int i = 1;
+        for (i; iter != endIter; ++iter,++i)
+        {
+            cout << i << ". " << iter->first << ", https://www.imdb.com/name/" << iter->second << endl;
+        }
+
+        string selectionString = "";
+
+
+        int selection = 0;
+        while (selection == 0)
+        {
+            getline(cin,selectionString);
+            try
+            {
+                selection = stoi(selectionString);
+                if (selection < 1 || selection >= i)
+                {
+                    selection = 0;
+                    throw invalid_argument("test");
+                }
+            }
+            catch(invalid_argument& e)
+            {
+                cout << "Please type a valid number." << endl;
+            }
+        }
+
+
+
+
+        for (int i = 0; i < selection - 1; ++i)
+        {
+            ++iteratorPair.first;
+        }
+
+        return iteratorPair.first->second;
+    }
+}
+
