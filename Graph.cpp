@@ -230,9 +230,9 @@ void Graph::printResults(const vector<string>& path, int sep)
     if(sep != -1)
     {
         cout << "Degrees of Separation: " << sep << endl;
+        cout << "Path from actor 1 to actor 2: " << endl;
         for(int i = 0; i < path.size() - 1; i++)
         {
-            cout << "Path from actor 1 to actor 2: " << endl;
             cout << FindActor(path[i]) << " -> " << FindActor(path[i + 1]) << endl;
             cout << "\tCollaborations: " << endl;
             for(string mov : adjMovies[make_pair(path[i], path[i + 1])])
