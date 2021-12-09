@@ -114,34 +114,54 @@ void Graph::BFS(const string& sourceID, const string& destID)
 
 void Graph::bidirectional(const string& sourceID, const string& destID) {
 
-    // Source for Bidirectional stuff: https://www.geeksforgeeks.org/bidirectional-search/
+    // Source for Bidirectional algorithm: https://www.geeksforgeeks.org/bidirectional-search/
 
+    // Start of timer
     auto startTime = chrono::high_resolution_clock::now();
 
+    // These unordered_sets keep track of all the actors that have already been visited
     unordered_set<string> sourceVisited;
     unordered_set<string> destVisited;
 
+    // These unordered_maps keep track of the previous actors. The path can be traced back to the source actor in
+    // sourcePrev or the destination actor in destPrev.
     unordered_map<string,string> sourcePrev; // key = actor, value = previous actor
     unordered_map<string,string> destPrev; // key = actor, value = previous actor
 
+    // Initializing queues for the forward (from source) and backward (from destination) searches. The queues have pairs
+    // where:
+    //      first = actor ID
+    //      second = level of search
+    // The level of search is based on how many levels deep the search has gone. It starts at 0 with the source or
+    // destination actors and increases by 1 every level.
     queue<pair<string,int>> sourceQueue;
     sourceQueue.push(make_pair(sourceID,0));
 
     queue<pair<string,int>> destQueue;
     destQueue.push(make_pair(destID,0));
 
+    // Placing the source and destination IDs into the visited sets
     sourceVisited.insert(sourceID);
     destVisited.insert(destID);
 
+    // Continues to iterate through the graph until a common visited actor is found or one of the queues is emptied.
+    // If a queue is emptied it means that the source and destination actors are on not connected sections of the graph
+    // and there is no path between them
     while (!sourceQueue.empty() && !destQueue.empty())
     {
+        // Conducts one level of search on the forward traversal
         bidirectionalBFS(sourceQueue, sourceVisited, sourcePrev);
+
+        // Checks if there are common visited actors in the source and desination visited sets
         if (checkOverlap(sourceVisited, destVisited, sourcePrev, destPrev, sourceID, destID, startTime))
         {
             return;
         }
+
+        // Conducts one level of search on the backward traversal
         bidirectionalBFS(destQueue, destVisited, destPrev);
 
+        // Checks if there are common visited actors in the source and desination visited sets
         if (checkOverlap(sourceVisited, destVisited, sourcePrev, destPrev, sourceID, destID, startTime))
         {
             return;
@@ -149,6 +169,7 @@ void Graph::bidirectional(const string& sourceID, const string& destID) {
 
     }
 
+    // Used when no path is found
     vector<string> path;
     printResults(path,-1);
     return;
@@ -158,21 +179,27 @@ bool Graph::checkOverlap(const unordered_set<string>& sourceVisited, const unord
         const unordered_map<string,string>& sourcePrev, const unordered_map<string,string>& destPrev,
         const string& sourceID, const string& destID, chrono::time_point<chrono::high_resolution_clock> startTime)
 {
-    vector<string> path;
-
+    // Iterates through the source visited set and checks if that current iteration is found in the destination visited
+    // set.
     for (auto iter = sourceVisited.begin(); iter != sourceVisited.end(); ++iter)
     {
+        // If a common actor is found, then a path from the source to the destination was found.
         if (destVisited.find(*iter) != destVisited.end())
         {
+            // A vector to keep track of the path is initialized
+            vector<string> path;
+
             string currID = *iter;
             path.emplace_back(currID);
 
+            // Works backward through the source map to find the path back to the source node from the intersection
             while (currID != sourceID)
             {
                 currID = sourcePrev.at(currID);
                 path.emplace(path.begin(),currID);
             }
 
+            // Works backward through the destination map to find the path back to the destination node from the intersection
             currID = *iter;
             while (currID != destID)
             {
@@ -180,14 +207,18 @@ bool Graph::checkOverlap(const unordered_set<string>& sourceVisited, const unord
                 path.emplace_back(currID);
             }
 
+            // Records the end time
             auto endTime = chrono::high_resolution_clock::now();
 
+            // Calculates total time taken in microseconds
             double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
 
+            // Prints the results
             cout << "~Using Bidirectional Shortest Path~" << endl;
             cout << "Time taken to complete search: " << time << " microseconds" << endl;
             printResults(path,path.size() - 1);
 
+            // True is returned if a path was found, ending the bidirectional search
             return true;
         }
     }
@@ -196,11 +227,12 @@ bool Graph::checkOverlap(const unordered_set<string>& sourceVisited, const unord
 
 void Graph::bidirectionalBFS(queue<pair<string,int>>& q, unordered_set<string>& visited, unordered_map<string,string>& previous)
 {
+    // Conducts one level of search on a given queue.
     int level = q.front().second;
     while (q.front().second == level)
     {
         string currID = q.front().first;
-        vector<string> children = graph[currID];
+        const vector<string>& children = graph[currID];
 
         for (int i = 0; i < children.size(); ++i)
         {
@@ -219,6 +251,7 @@ void Graph::bidirectionalBFS(queue<pair<string,int>>& q, unordered_set<string>& 
 
 string Graph::findActor(const string& ID)
 {
+    // Finds the name of the actor associated with a given ID
     for (auto iter = actors.begin(); iter != actors.end(); ++iter)
     {
         if ((*iter).second == ID)
@@ -231,6 +264,7 @@ string Graph::findActor(const string& ID)
 
 string Graph::findMovie(const string &ID)
 {
+    // Finds the name of the movie associated with a given ID
     for (auto iter = movies.begin(); iter != movies.end(); ++iter)
     {
         if ((*iter).second == ID)
@@ -278,7 +312,6 @@ void Graph::readData()
         istringstream stream(lineFromFile);
         getline(stream, movieID, ',');
         getline(stream, movieTitle);
-//        movies[movieID] = movieTitle;
         movies.insert(make_pair(movieTitle,movieID));
     }
 
@@ -313,6 +346,7 @@ void Graph::getResults(string src, string dest)
 
 bool Graph::doesActorExist(const string& actor)
 {
+    // Checks to see if an actor with the given name exists
     if (actors.find(actor) != actors.end())
     {
         return true;
@@ -322,6 +356,7 @@ bool Graph::doesActorExist(const string& actor)
 
 bool Graph::isUniqueName(const string& name)
 {
+    // Checks if the given name is unique
     auto iter = actors.equal_range(name);
     if (++iter.first != iter.second)
     {
@@ -332,12 +367,16 @@ bool Graph::isUniqueName(const string& name)
 
 string Graph::checkDuplicate(const string& name)
 {
+    // This functions returns the ID of an actor with the given name. If there are duplicates, it prompts the user to
+    // select one of the duplicates.
     if (isUniqueName(name))
     {
+        // If the name is unique, simply returns the ID of that name
         return actors.find(name)->second;
     }
     else
     {
+        // Prompts the user to select which duplicate they want
         cout << "Multiple actors have the name " << name << ". Please type the number corresponding to your selection:" << endl;
 
         auto iteratorPair = actors.equal_range(name);
@@ -345,8 +384,9 @@ string Graph::checkDuplicate(const string& name)
         auto endIter = iteratorPair.second;
 
         int i = 1;
-        for (i; iter != endIter; ++iter,++i)
+        for (; iter != endIter; ++iter,++i)
         {
+            // Prints the link to each actor to help differentiate each duplicate
             cout << i << ". " << iter->first << ", https://www.imdb.com/name/" << iter->second << endl;
         }
 
@@ -354,6 +394,7 @@ string Graph::checkDuplicate(const string& name)
 
 
         int selection = 0;
+        // Checks to ensure selection is valid
         while (selection == 0)
         {
             getline(cin,selectionString);

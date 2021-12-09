@@ -5,6 +5,8 @@ int main()
     cout << "Welcome to Monty Python and the Holy Graph!" << endl;
     cout << "Please wait while the program loads..." << endl;
     cout << endl;
+
+    // Initializing graph
     Graph g;
     string actor1;
     string actor2;
