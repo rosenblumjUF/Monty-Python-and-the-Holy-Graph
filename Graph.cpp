@@ -61,7 +61,7 @@ void Graph::BFS(const string& sourceID, const string& destID)
 {
     //Source: based on algorithms given in class and from https://www.geeksforgeeks.org/shortest-path-unweighted-graph/
     //start time here
-    auto startTime = chrono::steady_clock::now();
+    auto startTime = chrono::high_resolution_clock::now();
 
     queue<string> q; //vertices to be visited
     set<string> visited; //stores visited vertices
@@ -99,12 +99,12 @@ void Graph::BFS(const string& sourceID, const string& destID)
                         n = pred[n];
                     }
                     //time stop here
-                    auto endTime = chrono::steady_clock::now();
+                    auto endTime = chrono::high_resolution_clock::now();
 
                     double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
 
                     cout << "~Using BFS Shortest Path~" << endl;
-                    cout << "Time taken to complete search: " << time << " ms" << endl;
+                    cout << "Time taken to complete search: " << time << " microseconds" << endl;
                     printResults(actorsOnPath, degreesOfSep);
                     return;
                 }
@@ -117,7 +117,7 @@ void Graph::bidirectional(const string& sourceID, const string& destID) {
 
     // Source for Bidirectional stuff: https://www.geeksforgeeks.org/bidirectional-search/
 
-    auto startTime = chrono::steady_clock::now();
+    auto startTime = chrono::high_resolution_clock::now();
 
     unordered_set<string> sourceVisited;
     unordered_set<string> destVisited;
@@ -144,12 +144,12 @@ void Graph::bidirectional(const string& sourceID, const string& destID) {
             path.emplace_back(sourceID);
             path.emplace_back(destID);
 
-            auto endTime = chrono::steady_clock::now();
+            auto endTime = chrono::high_resolution_clock::now();
 
             double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
 
             cout << "~Using Bidirectional Shortest Path~" << endl;
-            cout << "Time taken to complete search: " << time << " ms" << endl;
+            cout << "Time taken to complete search: " << time << " microseconds" << endl;
             printResults(path,path.size() - 1);
 
             return;
@@ -176,12 +176,12 @@ void Graph::bidirectional(const string& sourceID, const string& destID) {
                     path.emplace_back(currID);
                 }
 
-                auto endTime = chrono::steady_clock::now();
+                auto endTime = chrono::high_resolution_clock::now();
 
                 double time = chrono::duration_cast<chrono::microseconds>(endTime - startTime).count();
 
                 cout << "~Using Bidirectional Shortest Path~" << endl;
-                cout << "Time taken to complete search: " << time << " ms" << endl;
+                cout << "Time taken to complete search: " << time << " microseconds" << endl;
                 printResults(path,path.size() - 1);
 
                 return;
